@@ -1,0 +1,30 @@
+name:     gm-toolkit
+version:  "0.1.0"
+homepage: https://github.com/tuxagon/gm-toolkit
+
+dependencies:
+  - aeson
+  - base
+  - servant-server
+  - wai
+  - warp
+
+executables:
+  server:
+    main: Main.hs
+    source-dirs:
+      - app
+      - src
+
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+      - test
+      - src
+    dependencies:
+      - aeson
+      - hspec
+      - hspec-wai
+      - hspec-wai-json
+
