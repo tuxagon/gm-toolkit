@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0a41f4ddf552eebff0b1cd03caaab3ae1dffe1b02f096a623d6c21ace0546147
+-- hash: aeaf419d341b5f1844b973d232bc8ba767edd36677f55bd4a14f6aff8cc13364
 
 name:           gm-toolkit
 version:        0.1.0
@@ -16,7 +16,7 @@ build-type:     Simple
 executable server
   main-is: Main.hs
   other-modules:
-      Lib
+      Api
       Paths_gm_toolkit
   hs-source-dirs:
       app
@@ -33,7 +33,7 @@ test-suite spec
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Lib
+      Api
       Paths_gm_toolkit
   hs-source-dirs:
       test
