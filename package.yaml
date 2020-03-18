@@ -5,6 +5,10 @@ homepage: https://github.com/tuxagon/gm-toolkit
 dependencies:
   - aeson
   - base
+  - monad-logger
+  - persistent
+  - persistent-postgresql
+  - persistent-template
   - servant-server
   - text
   - wai
