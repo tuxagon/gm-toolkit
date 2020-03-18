@@ -1,6 +1,7 @@
-{-# LANGUAGE DataKinds       #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE TypeOperators   #-}
+{-# LANGUAGE DataKinds         #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeOperators     #-}
 module Api
     ( startApp
     , app
@@ -8,19 +9,22 @@ module Api
 
 import Data.Aeson
 import Data.Aeson.TH
+import Data.Text
+import GHC.Generics
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 
-data User = User
-  { userId        :: Int
-  , userFirstName :: String
-  , userLastName  :: String
-  } deriving (Eq, Show)
+data Product = Product
+  { productName     :: Text
+  , productPrice    :: Int
+  , productQuantity :: Int
+  , productSource   :: Text
+  } deriving (Eq, Generic, Show)
 
-$(deriveJSON defaultOptions ''User)
+instance ToJSON Product
 
-type API = "users" :> Get '[JSON] [User]
+type API = "products" :> Get '[JSON] [Product]
 
 startApp :: IO ()
 startApp = run 8080 app
@@ -32,9 +36,9 @@ api :: Proxy API
 api = Proxy
 
 server :: Server API
-server = return users
+server = return products
 
-users :: [User]
-users = [ User 1 "Isaac" "Newton"
-        , User 2 "Albert" "Einstein"
-        ]
+products :: [Product]
+products =
+  [ Product "Sword" 50 2 "You hit things with it"
+  ]
