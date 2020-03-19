@@ -7,6 +7,8 @@ module Api
     , app
     ) where
 
+import qualified Model as M
+
 import Data.Aeson
 import Data.Aeson.TH
 import Data.Text
