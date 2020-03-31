@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: aeee21f87521db530cb3fd14173877830dfa933c9e837e01a7d6b556fb11c24c
+-- hash: da9ec15d4ba8988c898e1f032efce9199d9cfe021482bb165c1ac7a56c12a251
 
 name:           gm-toolkit
 version:        0.1.0
@@ -17,6 +17,7 @@ executable server
   main-is: Main.hs
   other-modules:
       Api
+      Database
       Model
       Paths_gm_toolkit
   hs-source-dirs:
@@ -26,6 +27,7 @@ executable server
       aeson
     , base
     , monad-logger
+    , mtl
     , persistent
     , persistent-postgresql
     , persistent-template
@@ -40,6 +42,7 @@ test-suite spec
   main-is: Spec.hs
   other-modules:
       Api
+      Database
       Model
       Paths_gm_toolkit
   hs-source-dirs:
@@ -52,6 +55,7 @@ test-suite spec
     , hspec-wai
     , hspec-wai-json
     , monad-logger
+    , mtl
     , persistent
     , persistent-postgresql
     , persistent-template

@@ -6,6 +6,7 @@ dependencies:
   - aeson
   - base
   - monad-logger
+  - mtl
   - persistent
   - persistent-postgresql
   - persistent-template

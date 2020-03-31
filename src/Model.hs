@@ -14,7 +14,6 @@ import qualified Database.Persist.TH as PTH
 
 import Data.Text
 
-
 PTH.share
   [PTH.mkPersist PTH.sqlSettings
   , PTH.mkMigrate "migrateAll"
