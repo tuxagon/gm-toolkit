@@ -2,45 +2,67 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators     #-}
-module Api
-    ( startApp
-    , app
-    ) where
+module Api (runServer) where
 
-import qualified Model as M
-
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Trans.Except (throwE)
 import Data.Aeson
 import Data.Aeson.TH
+import Data.Int (Int64)
 import Data.Text
+import Database.Persist.Postgresql (ConnectionString)
 import GHC.Generics
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 
-data Product = Product
-  { productName     :: Text
-  , productPrice    :: Int
-  , productQuantity :: Int
-  , productSource   :: Text
-  } deriving (Eq, Generic, Show)
 
-instance ToJSON Product
+import Database (fetchPostgresConnection, fetchProduct, createProduct)
+import Schema
 
-type API = "products" :> Get '[JSON] [Product]
+-- data Product = Product
+--   { productName     :: Text
+--   , productPrice    :: Int
+--   , productQuantity :: Int
+--   , productSource   :: Text
+--   } deriving (Eq, Generic, Show)
 
-startApp :: IO ()
-startApp = run 8080 app
+-- instance ToJSON Product
 
-app :: Application
-app = serve api server
+type API =
+       "api" :> "products" :> Get '[JSON] [Product]
+  :<|> "api" :> "products" :> Capture "productid" Int64 :> Get '[JSON] Product
+  :<|> "api" :> "products" :> ReqBody '[JSON] Product :> Post '[JSON] Product
+
+fetchProductsHandler :: ConnectionString -> Handler [Product]
+fetchProductsHandler connString =
+  undefined
+
+fetchProductHandler :: ConnectionString -> Int64 -> Handler Product
+fetchProductHandler connString productId = do
+  maybeProduct <- liftIO $ fetchProduct connString productId
+  case maybeProduct of
+    Just product -> return product
+    Nothing -> Handler (throwE $ err401 { errBody = "Could not find product with that ID" })
+
+createProductHandler :: ConnectionString -> Product -> Handler Product
+createProductHandler connString product = do
+  productId <- liftIO $ createProduct connString product
+  maybeProduct <- liftIO $ fetchProduct connString productId
+  case maybeProduct of
+    Just product -> return product
+    Nothing -> Handler (throwE $ err401 { errBody = "Could not find product with that ID" })
+
+runServer :: IO ()
+runServer = do
+  connString <- fetchPostgresConnection
+  run 8080 (serve api (server connString))
 
 api :: Proxy API
-api = Proxy
+api = Proxy :: Proxy API
 
-server :: Server API
-server = return products
-
-products :: [Product]
-products =
-  [ Product "Sword" 50 2 "You hit things with it"
-  ]
+server :: ConnectionString -> Server API
+server connString =
+  fetchProductsHandler connString :<|>
+  fetchProductHandler connString :<|>
+  createProductHandler connString

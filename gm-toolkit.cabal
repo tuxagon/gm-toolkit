@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: da9ec15d4ba8988c898e1f032efce9199d9cfe021482bb165c1ac7a56c12a251
+-- hash: d455ed24b5892d2a28618312d408f6cbc690fd9017be100bfda0ca51a8c1c628
 
 name:           gm-toolkit
 version:        0.1.0
@@ -18,7 +18,7 @@ executable server
   other-modules:
       Api
       Database
-      Model
+      Schema
       Paths_gm_toolkit
   hs-source-dirs:
       app
@@ -33,6 +33,7 @@ executable server
     , persistent-template
     , servant-server
     , text
+    , transformers
     , wai
     , warp
   default-language: Haskell2010
@@ -43,7 +44,7 @@ test-suite spec
   other-modules:
       Api
       Database
-      Model
+      Schema
       Paths_gm_toolkit
   hs-source-dirs:
       test
@@ -61,6 +62,7 @@ test-suite spec
     , persistent-template
     , servant-server
     , text
+    , transformers
     , wai
     , warp
   default-language: Haskell2010

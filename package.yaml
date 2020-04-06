@@ -12,6 +12,7 @@ dependencies:
   - persistent-template
   - servant-server
   - text
+  - transformers
   - wai
   - warp
 
